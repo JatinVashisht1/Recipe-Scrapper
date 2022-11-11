@@ -11,8 +11,10 @@ interface RecipeExtractor {
     fun getIngredientList(driver: EdgeDriver): List<String>
     fun stringListToIngredientList(ingredientList: List<String>): List<Ingredient>
     fun getRecipeMethod(driver: EdgeDriver): List<String>
-    fun getRecipe(ingredient: List<Ingredient>, method: List<String>, title: String): Recipe
     fun getRecipeTitle(driver: EdgeDriver): String
+    fun getRecipe(ingredient: List<Ingredient>, method: List<String>, title: String, tag: String, imageUrl: String): Recipe
+
+    fun getRecipeImage(driver: EdgeDriver): String
 }
 
 fun RecipeExtractor(): RecipeExtractor = RecipeExtractorImpl()
@@ -25,6 +27,12 @@ private class RecipeExtractorImpl : RecipeExtractor {
             ingredientList.add(it.text)
         }
         return ingredientList
+    }
+
+    override fun getRecipeImage(driver: EdgeDriver): String {
+        val imageContainer = driver.findElement(By.id("story_image_main"))
+        val url = imageContainer.getAttribute("src")
+        return url
     }
 
     override fun stringListToIngredientList(ingredientList: List<String>): List<Ingredient> {
@@ -83,9 +91,8 @@ private class RecipeExtractorImpl : RecipeExtractor {
         return methodList.toList()
     }
 
-
-    override fun getRecipe(ingredient: List<Ingredient>, method: List<String>, title: String): Recipe {
-        return Recipe(ingredient = ingredient, method = method, title = title)
+    override fun getRecipe(ingredient: List<Ingredient>, method: List<String>, title: String, tag: String, imageUrl: String): Recipe {
+        return Recipe(ingredient = ingredient, method = method, title = title, tag = tag, imageUrl = imageUrl)
     }
 
     override fun getRecipeTitle(driver: EdgeDriver): String {

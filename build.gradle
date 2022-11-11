@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.0.0'
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.4.0'
     implementation 'com.google.code.gson:gson:2.9.0'
 }
 

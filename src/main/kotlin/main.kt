@@ -19,9 +19,7 @@ fun main() {
 //    options.setBinary("C:\\webdriver\\msedgedriver.exe");
     val driver = EdgeDriver(options)
 
-
-    // telling selenium to wait for how many millis seconds before it gets result
-    driver.manage().timeouts().implicitlyWait(Duration.ofMillis(5000))
+    driver.manage().timeouts().implicitlyWait(Duration.ofMillis(10000))
     val height = ((driver.manage().window().size.height * 70).toFloat() / 100f).toInt()
     val width = ((driver.manage().window().size.width * 70).toFloat() / 100f).toInt()
     driver.manage().window().size = Dimension(width, height)
@@ -41,7 +39,7 @@ fun main() {
     var card = cards[i]
     val recipeJsonList = mutableListOf<String>()
     try {
-        for (j in 0 until 500) {
+        for (j in 0 until size) {
             card.click()
             val recipe = getRecipe(driver = driver)
             recipeList.add(recipe)
@@ -60,7 +58,7 @@ fun main() {
         val jsonRecipe = gson.toJson(rec)
         recipeJsonList.add(jsonRecipe)
     }
-    val fileToWrite = File("src/main/resources/snacks.json")
+    val fileToWrite = File("src/main/resources/winter.json")
     fileToWrite.printWriter().use { writer ->
         writer.println(recipeJsonList)
     }
@@ -73,15 +71,6 @@ fun declinePopUp(driver: EdgeDriver) {
         declineButton.click()
     }catch(_: Exception){
 
-    }
-}
-
-fun pressEscape(driver: EdgeDriver){
-    try{
-    driver.keyboard.pressKey(Keys.ESCAPE)
-
-    }catch(e: Exception){
-        println("Escape: $e")
     }
 }
 
@@ -98,8 +87,8 @@ fun clickMoreResults(driver: EdgeDriver) {
 
 fun initialSetup(driver: EdgeDriver) {
     // specifying which url to follow
-    driver.get("file:///D:/desktop/Study/SeleniumWithKotlin/snacks.mhtml")
-//    driver.get("https://food.ndtv.com/recipes/snacks-recipes")
+    driver.get("file:///D:/desktop/Study/SeleniumWithKotlin/winter.mhtml")
+//    driver.get("https://food.ndtv.com/recipes/chicken-recipes")
 
     // finding an element by id
     try {
@@ -154,8 +143,11 @@ fun getRecipe(driver: EdgeDriver): Recipe {
     // getting title of recipe
     val title = recipeExtractor.getRecipeTitle(driver = driver)
 
+    // getting image url of recipe
+    val url = recipeExtractor.getRecipeImage(driver = driver)
+
     // converting method and ingredient list to type of data.Recipe data class
-    val recipe = recipeExtractor.getRecipe(ingredientList, methodInString, title)
+    val recipe = recipeExtractor.getRecipe(ingredientList, methodInString, title, tag = "winter", imageUrl = url)
 
     //converting data class data.Recipe into Gson using Gson JSON handler
 //    val gson = Gson()
